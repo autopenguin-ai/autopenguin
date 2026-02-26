@@ -38,16 +38,19 @@
   
   <!-- Facebook Pixel Code -->
   <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window,document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1323021536137769'); 
-  fbq('track', 'PageView');
+  var fbPixelId = '%VITE_FB_PIXEL_ID%';
+  if (fbPixelId && fbPixelId !== '' && !fbPixelId.includes('VITE_')) {
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', fbPixelId);
+    fbq('track', 'PageView');
+  }
   </script>
   <!-- End Facebook Pixel Code -->
   <meta property="og:title" content="AutoPenguin - Automation Builder">
@@ -57,12 +60,7 @@
   </head>
 
   <body>
-    <!-- Facebook Pixel Code (noscript) -->
-    <noscript>
-      <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1323021536137769&ev=PageView&noscript=1"/>
-    </noscript>
-    <!-- End Facebook Pixel Code (noscript) -->
+    <!-- Facebook Pixel noscript removed — pixel ID is now configured via VITE_FB_PIXEL_ID env var -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
