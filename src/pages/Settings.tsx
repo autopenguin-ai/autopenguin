@@ -191,8 +191,8 @@ export default function Settings() {
 
   const loadPersonalization = async () => {
     if (!user) return;
-    const { data } = await (supabase
-      .from('profiles') as any)
+    const { data } = await supabase
+      .from('profiles')
       .select('assistant_name, learning_enabled')
       .eq('user_id', user.id)
       .single();
@@ -206,8 +206,8 @@ export default function Settings() {
   const savePersonalization = async () => {
     if (!user) return;
     setSavingPersonalization(true);
-    const { error } = await (supabase
-      .from('profiles') as any)
+    const { error } = await supabase
+      .from('profiles')
       .update({ assistant_name: assistantName || 'Penguin', learning_enabled: learningEnabled })
       .eq('user_id', user.id);
 
@@ -222,8 +222,8 @@ export default function Settings() {
   const loadMemories = async () => {
     if (!user) return;
     setLoadingMemories(true);
-    const { data } = await (supabase
-      .from('steve_knowledge_base') as any)
+    const { data } = await supabase
+      .from('steve_knowledge_base')
       .select('id, title, content, category, created_at, updated_at')
       .eq('user_id', user.id)
       .in('category', ['user_preference', 'user_fact', 'user_pattern', 'user_person', 'company_fact'])

@@ -62,11 +62,11 @@ export function useTalent() {
     queryFn: async () => {
       if (!userCompany?.id) return [];
 
-      const { data, error } = await (supabase
-        .from('talent' as any)
+      const { data, error } = await supabase
+        .from('talent')
         .select('*')
         .eq('company_id', userCompany.id)
-        .order('created_at', { ascending: false }) as any);
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching talent:', error);
@@ -155,11 +155,11 @@ export function useCreateTalent() {
         company_id: userCompany.id,
       };
 
-      const { data, error } = await (supabase
-        .from('talent' as any)
+      const { data, error } = await supabase
+        .from('talent')
         .insert(insertData)
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       return data as TalentMember;
@@ -188,12 +188,12 @@ export function useUpdateTalent() {
 
   return useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<TalentMember> }) => {
-      const { data, error } = await (supabase
-        .from('talent' as any)
+      const { data, error } = await supabase
+        .from('talent')
         .update(updates)
         .eq('id', id)
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       return data as TalentMember;
@@ -222,10 +222,10 @@ export function useDeleteTalent() {
 
   return useMutation({
     mutationFn: async (talentId: string) => {
-      const { error } = await (supabase
-        .from('talent' as any)
+      const { error } = await supabase
+        .from('talent')
         .delete()
-        .eq('id', talentId) as any);
+        .eq('id', talentId);
 
       if (error) throw error;
     },
@@ -253,10 +253,10 @@ export function useDeleteTalentBulk() {
 
   return useMutation({
     mutationFn: async (talentIds: string[]) => {
-      const { error } = await (supabase
-        .from('talent' as any)
+      const { error } = await supabase
+        .from('talent')
         .delete()
-        .in('id', talentIds) as any);
+        .in('id', talentIds);
 
       if (error) throw error;
       return talentIds.length;
@@ -297,11 +297,11 @@ export function useBookings() {
     queryFn: async () => {
       if (!userCompany?.id) return [];
 
-      const { data, error } = await (supabase
-        .from('bookings' as any)
+      const { data, error } = await supabase
+        .from('bookings')
         .select('*, talent:talent_id(name)')
         .eq('company_id', userCompany.id)
-        .order('date', { ascending: false }) as any);
+        .order('date', { ascending: false });
 
       if (error) {
         console.error('Error fetching bookings:', error);
@@ -386,11 +386,11 @@ export function useCreateBooking() {
         company_id: userCompany.id,
       };
 
-      const { data, error } = await (supabase
-        .from('bookings' as any)
+      const { data, error } = await supabase
+        .from('bookings')
         .insert(insertData)
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       return data as Booking;
@@ -419,12 +419,12 @@ export function useUpdateBooking() {
 
   return useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<Booking> }) => {
-      const { data, error } = await (supabase
-        .from('bookings' as any)
+      const { data, error } = await supabase
+        .from('bookings')
         .update(updates)
         .eq('id', id)
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       return data as Booking;
@@ -453,10 +453,10 @@ export function useDeleteBooking() {
 
   return useMutation({
     mutationFn: async (bookingId: string) => {
-      const { error } = await (supabase
-        .from('bookings' as any)
+      const { error } = await supabase
+        .from('bookings')
         .delete()
-        .eq('id', bookingId) as any);
+        .eq('id', bookingId);
 
       if (error) throw error;
     },

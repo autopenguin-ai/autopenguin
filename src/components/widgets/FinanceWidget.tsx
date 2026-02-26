@@ -61,9 +61,8 @@ export function FinanceWidget({ filters }: FinanceWidgetProps) {
 
       const companyId = profile.company_id;
 
-      // Both tables added via migration - not yet in generated types
       let invoiceQuery = supabase
-        .from('invoices' as any)
+        .from('invoices')
         .select('id, invoice_number, total, status, issue_date, client_id')
         .eq('company_id', companyId)
         .order('issue_date', { ascending: false })
@@ -74,7 +73,7 @@ export function FinanceWidget({ filters }: FinanceWidgetProps) {
       }
 
       let expenseQuery = supabase
-        .from('expenses' as any)
+        .from('expenses')
         .select('id, description, category, amount, status, date')
         .eq('company_id', companyId)
         .order('date', { ascending: false })
@@ -89,8 +88,8 @@ export function FinanceWidget({ filters }: FinanceWidgetProps) {
         expenseQuery,
       ]);
 
-      setInvoices((invoicesRes.data as any[]) || []);
-      setExpenses((expensesRes.data as any[]) || []);
+      setInvoices(invoicesRes.data || []);
+      setExpenses(expensesRes.data || []);
       setLoading(false);
     }
 

@@ -1,3 +1,4 @@
+Initialising login role...
 export type Json =
   | string
   | number
@@ -11,6 +12,31 @@ export type Database = {
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
+  }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -114,6 +140,86 @@ export type Database = {
             columns: ["workflow_run_id"]
             isOneToOne: false
             referencedRelation: "workflow_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bookings: {
+        Row: {
+          booking_type: string | null
+          client_id: string | null
+          company_id: string
+          created_at: string | null
+          date: string | null
+          duration: string | null
+          fee: number | null
+          id: string
+          notes: string | null
+          payment_status: string | null
+          project_id: string | null
+          status: string | null
+          talent_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          booking_type?: string | null
+          client_id?: string | null
+          company_id: string
+          created_at?: string | null
+          date?: string | null
+          duration?: string | null
+          fee?: number | null
+          id?: string
+          notes?: string | null
+          payment_status?: string | null
+          project_id?: string | null
+          status?: string | null
+          talent_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          booking_type?: string | null
+          client_id?: string | null
+          company_id?: string
+          created_at?: string | null
+          date?: string | null
+          duration?: string | null
+          fee?: number | null
+          id?: string
+          notes?: string | null
+          payment_status?: string | null
+          project_id?: string | null
+          status?: string | null
+          talent_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_talent_id_fkey"
+            columns: ["talent_id"]
+            isOneToOne: false
+            referencedRelation: "talent"
             referencedColumns: ["id"]
           },
         ]
@@ -772,6 +878,280 @@ export type Database = {
           },
         ]
       }
+      expenses: {
+        Row: {
+          amount: number
+          approved_by: string | null
+          category: string | null
+          company_id: string
+          created_at: string | null
+          date: string | null
+          description: string
+          id: string
+          notes: string | null
+          project_id: string | null
+          receipt_url: string | null
+          status: string | null
+          submitted_by: string | null
+          talent_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          approved_by?: string | null
+          category?: string | null
+          company_id: string
+          created_at?: string | null
+          date?: string | null
+          description: string
+          id?: string
+          notes?: string | null
+          project_id?: string | null
+          receipt_url?: string | null
+          status?: string | null
+          submitted_by?: string | null
+          talent_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          approved_by?: string | null
+          category?: string | null
+          company_id?: string
+          created_at?: string | null
+          date?: string | null
+          description?: string
+          id?: string
+          notes?: string | null
+          project_id?: string | null
+          receipt_url?: string | null
+          status?: string | null
+          submitted_by?: string | null
+          talent_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_talent_id_fkey"
+            columns: ["talent_id"]
+            isOneToOne: false
+            referencedRelation: "talent"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invitations: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          email: string
+          expires_at: string
+          id: string
+          invitation_code: string
+          invited_by: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          role_template_id: string | null
+          status: string
+          token: string | null
+          updated_at: string
+          used_at: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by: string
+          email: string
+          expires_at: string
+          id?: string
+          invitation_code: string
+          invited_by?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          role_template_id?: string | null
+          status?: string
+          token?: string | null
+          updated_at?: string
+          used_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invitation_code?: string
+          invited_by?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          role_template_id?: string | null
+          status?: string
+          token?: string | null
+          updated_at?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invitations_role_template_id_fkey"
+            columns: ["role_template_id"]
+            isOneToOne: false
+            referencedRelation: "role_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          booking_id: string | null
+          client_id: string | null
+          company_id: string
+          created_at: string | null
+          due_date: string | null
+          id: string
+          invoice_number: string
+          issue_date: string | null
+          items: Json | null
+          notes: string | null
+          paid_date: string | null
+          status: string | null
+          subtotal: number | null
+          talent_id: string | null
+          tax: number | null
+          tax_rate: number | null
+          total: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          booking_id?: string | null
+          client_id?: string | null
+          company_id: string
+          created_at?: string | null
+          due_date?: string | null
+          id?: string
+          invoice_number: string
+          issue_date?: string | null
+          items?: Json | null
+          notes?: string | null
+          paid_date?: string | null
+          status?: string | null
+          subtotal?: number | null
+          talent_id?: string | null
+          tax?: number | null
+          tax_rate?: number | null
+          total?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          booking_id?: string | null
+          client_id?: string | null
+          company_id?: string
+          created_at?: string | null
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          issue_date?: string | null
+          items?: Json | null
+          notes?: string | null
+          paid_date?: string | null
+          status?: string | null
+          subtotal?: number | null
+          talent_id?: string | null
+          tax?: number | null
+          tax_rate?: number | null
+          total?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_talent_id_fkey"
+            columns: ["talent_id"]
+            isOneToOne: false
+            referencedRelation: "talent"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      llm_connections: {
+        Row: {
+          api_key_vault_id: string | null
+          base_url: string | null
+          company_id: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          model: string
+          provider: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          api_key_vault_id?: string | null
+          base_url?: string | null
+          company_id: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          model: string
+          provider: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          api_key_vault_id?: string | null
+          base_url?: string | null
+          company_id?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          model?: string
+          provider?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "llm_connections_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       marketplace_templates: {
         Row: {
           categories: string[] | null
@@ -926,6 +1306,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          assistant_name: string | null
           automation_frequency: string | null
           company_id: string | null
           created_at: string
@@ -936,6 +1317,7 @@ export type Database = {
           industry: string | null
           is_active: boolean
           last_name: string | null
+          learning_enabled: boolean | null
           notify_push: boolean | null
           onboarding_completed: boolean | null
           onesignal_player_id: string | null
@@ -949,6 +1331,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          assistant_name?: string | null
           automation_frequency?: string | null
           company_id?: string | null
           created_at?: string
@@ -959,6 +1342,7 @@ export type Database = {
           industry?: string | null
           is_active?: boolean
           last_name?: string | null
+          learning_enabled?: boolean | null
           notify_push?: boolean | null
           onboarding_completed?: boolean | null
           onesignal_player_id?: string | null
@@ -972,6 +1356,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          assistant_name?: string | null
           automation_frequency?: string | null
           company_id?: string | null
           created_at?: string
@@ -982,6 +1367,7 @@ export type Database = {
           industry?: string | null
           is_active?: boolean
           last_name?: string | null
+          learning_enabled?: boolean | null
           notify_push?: boolean | null
           onboarding_completed?: boolean | null
           onesignal_player_id?: string | null
@@ -1158,6 +1544,47 @@ export type Database = {
           },
         ]
       }
+      role_templates: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          display_name: string
+          id: string
+          is_built_in: boolean | null
+          name: string
+          permissions: Json
+          updated_at: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string | null
+          display_name: string
+          id?: string
+          is_built_in?: boolean | null
+          name: string
+          permissions?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string | null
+          display_name?: string
+          id?: string
+          is_built_in?: boolean | null
+          name?: string
+          permissions?: Json
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_templates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       steve_actions: {
         Row: {
           company_id: string | null
@@ -1225,8 +1652,10 @@ export type Database = {
         Row: {
           company_id: string | null
           created_at: string | null
+          deleted_at: string | null
           id: string
           last_message_at: string | null
+          learnings_extracted: boolean | null
           title: string | null
           updated_at: string | null
           user_id: string | null
@@ -1234,8 +1663,10 @@ export type Database = {
         Insert: {
           company_id?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           id?: string
           last_message_at?: string | null
+          learnings_extracted?: boolean | null
           title?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -1243,8 +1674,10 @@ export type Database = {
         Update: {
           company_id?: string | null
           created_at?: string | null
+          deleted_at?: string | null
           id?: string
           last_message_at?: string | null
+          learnings_extracted?: boolean | null
           title?: string | null
           updated_at?: string | null
           user_id?: string | null
@@ -1267,6 +1700,7 @@ export type Database = {
           created_at: string | null
           embedding: string | null
           id: string
+          last_accessed_at: string | null
           metadata: Json | null
           tags: string[] | null
           title: string
@@ -1280,6 +1714,7 @@ export type Database = {
           created_at?: string | null
           embedding?: string | null
           id?: string
+          last_accessed_at?: string | null
           metadata?: Json | null
           tags?: string[] | null
           title: string
@@ -1293,6 +1728,7 @@ export type Database = {
           created_at?: string | null
           embedding?: string | null
           id?: string
+          last_accessed_at?: string | null
           metadata?: Json | null
           tags?: string[] | null
           title?: string
@@ -1365,6 +1801,7 @@ export type Database = {
           metadata: Json | null
           model_used: string | null
           role: string
+          source: string | null
           tokens_used: number | null
           user_id: string | null
         }
@@ -1378,6 +1815,7 @@ export type Database = {
           metadata?: Json | null
           model_used?: string | null
           role: string
+          source?: string | null
           tokens_used?: number | null
           user_id?: string | null
         }
@@ -1391,6 +1829,7 @@ export type Database = {
           metadata?: Json | null
           model_used?: string | null
           role?: string
+          source?: string | null
           tokens_used?: number | null
           user_id?: string | null
         }
@@ -1586,6 +2025,77 @@ export type Database = {
           },
         ]
       }
+      talent: {
+        Row: {
+          availability: string | null
+          category: string | null
+          company_id: string
+          contract_end: string | null
+          contract_start: string | null
+          created_at: string | null
+          email: string | null
+          engagement_rate: number | null
+          follower_count: number | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          rate_card: Json | null
+          social_handles: Json | null
+          stage_name: string | null
+          tags: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          availability?: string | null
+          category?: string | null
+          company_id: string
+          contract_end?: string | null
+          contract_start?: string | null
+          created_at?: string | null
+          email?: string | null
+          engagement_rate?: number | null
+          follower_count?: number | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          rate_card?: Json | null
+          social_handles?: Json | null
+          stage_name?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          availability?: string | null
+          category?: string | null
+          company_id?: string
+          contract_end?: string | null
+          contract_start?: string | null
+          created_at?: string | null
+          email?: string | null
+          engagement_rate?: number | null
+          follower_count?: number | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          rate_card?: Json | null
+          social_handles?: Json | null
+          stage_name?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "talent_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           assignee_id: string | null
@@ -1693,29 +2203,129 @@ export type Database = {
           },
         ]
       }
+      telegram_connections: {
+        Row: {
+          bot_token_vault_id: string | null
+          company_id: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          is_verified: boolean | null
+          telegram_chat_id: number | null
+          updated_at: string | null
+          user_id: string
+          verification_code: string | null
+        }
+        Insert: {
+          bot_token_vault_id?: string | null
+          company_id: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          telegram_chat_id?: number | null
+          updated_at?: string | null
+          user_id: string
+          verification_code?: string | null
+        }
+        Update: {
+          bot_token_vault_id?: string | null
+          company_id?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          telegram_chat_id?: number | null
+          updated_at?: string | null
+          user_id?: string
+          verification_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telegram_connections_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_requests: {
+        Row: {
+          company_id: string
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          rejection_reason: string | null
+          requested_at: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          company_id: string
+          email: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          rejection_reason?: string | null
+          requested_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          company_id?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          rejection_reason?: string | null
+          requested_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
           id: string
+          permissions: Json | null
           role: Database["public"]["Enums"]["app_role"]
+          role_template_id: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
+          permissions?: Json | null
           role: Database["public"]["Enums"]["app_role"]
+          role_template_id?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
+          permissions?: Json | null
           role?: Database["public"]["Enums"]["app_role"]
+          role_template_id?: string | null
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_role_template_id_fkey"
+            columns: ["role_template_id"]
+            isOneToOne: false
+            referencedRelation: "role_templates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       viewings: {
         Row: {
@@ -2064,6 +2674,7 @@ export type Database = {
       }
     }
     Functions: {
+      cleanup_deleted_conversations: { Args: never; Returns: undefined }
       create_vault_secret: {
         Args: { name: string; secret: string }
         Returns: string
@@ -2075,6 +2686,11 @@ export type Database = {
       }
       generate_company_name: { Args: never; Returns: string }
       generate_company_short_code: { Args: never; Returns: string }
+      generate_invitation_code: { Args: never; Returns: string }
+      generate_invoice_number: {
+        Args: { p_company_id: string }
+        Returns: string
+      }
       get_company_colleagues: {
         Args: never
         Returns: {
@@ -2103,6 +2719,7 @@ export type Database = {
         Returns: boolean
       }
       is_super_admin: { Args: never; Returns: boolean }
+      read_vault_secret: { Args: { p_id: string }; Returns: string }
       search_outcome_embeddings: {
         Args: {
           filter_company_id?: string
@@ -2143,7 +2760,13 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "ADMIN" | "EMPLOYEE" | "FREELANCER" | "SUPER_ADMIN"
+      app_role:
+        | "ADMIN"
+        | "EMPLOYEE"
+        | "FREELANCER"
+        | "SUPER_ADMIN"
+        | "MANAGER"
+        | "ACCOUNTANT"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2269,9 +2892,19 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
-      app_role: ["ADMIN", "EMPLOYEE", "FREELANCER", "SUPER_ADMIN"],
+      app_role: [
+        "ADMIN",
+        "EMPLOYEE",
+        "FREELANCER",
+        "SUPER_ADMIN",
+        "MANAGER",
+        "ACCOUNTANT",
+      ],
     },
   },
 } as const

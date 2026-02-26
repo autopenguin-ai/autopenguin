@@ -48,8 +48,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         last_name: profileData?.last_name || null,
         onboarding_completed: profileData?.onboarding_completed || false,
         industry: profileData?.industry || null,
-        assistant_name: (profileData as any)?.assistant_name || null,
-        learning_enabled: (profileData as any)?.learning_enabled !== false,
+        assistant_name: profileData?.assistant_name || null,
+        learning_enabled: profileData?.learning_enabled !== false,
       });
 
       // Fetch role from user_roles table

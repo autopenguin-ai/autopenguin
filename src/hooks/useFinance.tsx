@@ -63,11 +63,11 @@ export function useInvoices() {
     queryFn: async () => {
       if (!userCompany?.id) return [];
 
-      const { data, error } = await (supabase
-        .from('invoices' as any)
+      const { data, error } = await supabase
+        .from('invoices')
         .select('*, client:client_id(first_name, last_name)')
         .eq('company_id', userCompany.id)
-        .order('issue_date', { ascending: false }) as any);
+        .order('issue_date', { ascending: false });
 
       if (error) {
         console.error('Error fetching invoices:', error);
@@ -139,8 +139,8 @@ export function useCreateInvoice() {
       }
 
       // Generate invoice number via RPC
-      const { data: invoiceNumber, error: rpcError } = await (supabase
-        .rpc('generate_invoice_number' as any, { p_company_id: userCompany.id }) as any);
+      const { data: invoiceNumber, error: rpcError } = await supabase
+        .rpc('generate_invoice_number', { p_company_id: userCompany.id });
 
       if (rpcError) {
         console.error('Error generating invoice number:', rpcError);
@@ -165,11 +165,11 @@ export function useCreateInvoice() {
         company_id: userCompany.id,
       };
 
-      const { data, error } = await (supabase
-        .from('invoices' as any)
+      const { data, error } = await supabase
+        .from('invoices')
         .insert(insertData)
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       return data as Invoice;
@@ -198,12 +198,12 @@ export function useUpdateInvoice() {
 
   return useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<Invoice> }) => {
-      const { data, error } = await (supabase
-        .from('invoices' as any)
+      const { data, error } = await supabase
+        .from('invoices')
         .update(updates)
         .eq('id', id)
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       return data as Invoice;
@@ -232,10 +232,10 @@ export function useDeleteInvoice() {
 
   return useMutation({
     mutationFn: async (invoiceId: string) => {
-      const { error } = await (supabase
-        .from('invoices' as any)
+      const { error } = await supabase
+        .from('invoices')
         .delete()
-        .eq('id', invoiceId) as any);
+        .eq('id', invoiceId);
 
       if (error) throw error;
     },
@@ -275,11 +275,11 @@ export function useExpenses() {
     queryFn: async () => {
       if (!userCompany?.id) return [];
 
-      const { data, error } = await (supabase
-        .from('expenses' as any)
+      const { data, error } = await supabase
+        .from('expenses')
         .select('*')
         .eq('company_id', userCompany.id)
-        .order('date', { ascending: false }) as any);
+        .order('date', { ascending: false });
 
       if (error) {
         console.error('Error fetching expenses:', error);
@@ -369,11 +369,11 @@ export function useCreateExpense() {
         company_id: userCompany.id,
       };
 
-      const { data, error } = await (supabase
-        .from('expenses' as any)
+      const { data, error } = await supabase
+        .from('expenses')
         .insert(insertData)
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       return data as Expense;
@@ -402,12 +402,12 @@ export function useUpdateExpense() {
 
   return useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<Expense> }) => {
-      const { data, error } = await (supabase
-        .from('expenses' as any)
+      const { data, error } = await supabase
+        .from('expenses')
         .update(updates)
         .eq('id', id)
         .select()
-        .single() as any);
+        .single();
 
       if (error) throw error;
       return data as Expense;
@@ -436,10 +436,10 @@ export function useDeleteExpense() {
 
   return useMutation({
     mutationFn: async (expenseId: string) => {
-      const { error } = await (supabase
-        .from('expenses' as any)
+      const { error } = await supabase
+        .from('expenses')
         .delete()
-        .eq('id', expenseId) as any);
+        .eq('id', expenseId);
 
       if (error) throw error;
     },

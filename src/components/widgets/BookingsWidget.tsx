@@ -43,9 +43,9 @@ export function BookingsWidget({ filters }: BookingsWidgetProps) {
         return;
       }
 
-      // bookings table with talent join - both from migration
+      // bookings table with talent join
       let query = supabase
-        .from('bookings' as any)
+        .from('bookings')
         .select('id, booking_type, date, fee, status, talent_id, talent:talent_id(name), created_at')
         .eq('company_id', profile.company_id)
         .order('date', { ascending: false })
@@ -55,7 +55,7 @@ export function BookingsWidget({ filters }: BookingsWidgetProps) {
       if (filters?.booking_type) query = query.eq('booking_type', filters.booking_type);
 
       const { data } = await query;
-      setBookings((data as any[]) || []);
+      setBookings(data || []);
       setLoading(false);
     }
 

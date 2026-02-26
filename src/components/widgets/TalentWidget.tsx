@@ -43,9 +43,8 @@ export function TalentWidget({ filters }: TalentWidgetProps) {
         return;
       }
 
-      // talent table was added via migration - not yet in generated types
       let query = supabase
-        .from('talent' as any)
+        .from('talent')
         .select('id, name, stage_name, category, availability, created_at')
         .eq('company_id', profile.company_id)
         .order('created_at', { ascending: false })
@@ -55,7 +54,7 @@ export function TalentWidget({ filters }: TalentWidgetProps) {
       if (filters?.category) query = query.eq('category', filters.category);
 
       const { data } = await query;
-      setTalent((data as any[]) || []);
+      setTalent(data || []);
       setLoading(false);
     }
 

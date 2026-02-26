@@ -179,8 +179,8 @@ export const useSteve = () => {
   // Soft-delete a conversation (retained in DB for 7 days then purged)
   const deleteConversation = useCallback(async (convId: string) => {
     if (!user) return;
-    const { error } = await (supabase
-      .from('steve_conversations') as any)
+    const { error } = await supabase
+      .from('steve_conversations')
       .update({ deleted_at: new Date().toISOString() })
       .eq('id', convId)
       .eq('user_id', user.id);
