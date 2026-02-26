@@ -8,6 +8,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { 
   CheckSquare, 
   Clock, 
@@ -45,6 +55,7 @@ const Tasks = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [editTaskOpen, setEditTaskOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<TaskWithRelations | null>(null);
+  const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
   const [filters, setFilters] = useState({
     status: '',
     priority: '',
@@ -124,8 +135,13 @@ const Tasks = () => {
   };
 
   const handleDeleteTask = (taskId: string) => {
-    if (window.confirm(t('delete-task-confirm'))) {
-      deleteTask.mutate(taskId);
+    setDeleteTaskId(taskId);
+  };
+
+  const confirmDeleteTask = () => {
+    if (deleteTaskId) {
+      deleteTask.mutate(deleteTaskId);
+      setDeleteTaskId(null);
     }
   };
 
@@ -939,6 +955,23 @@ const Tasks = () => {
         open={editTaskOpen}
         onOpenChange={setEditTaskOpen}
       />
+
+      <AlertDialog open={deleteTaskId !== null} onOpenChange={(open) => { if (!open) setDeleteTaskId(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('delete-task-confirm')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('delete-task-description', 'This action cannot be undone. The task will be permanently deleted.')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('cancel', 'Cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteTask} className="bg-red-600 hover:bg-red-700">
+              {t('delete', 'Delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
