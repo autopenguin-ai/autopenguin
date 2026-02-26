@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { getEmailFrom } from '../_shared/env.ts';
+import { checkRateLimit, getClientIp, rateLimitResponse } from '../_shared/rate-limit.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,6 +20,12 @@ const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Rate limit: 10 req/min per IP
+  const clientIp = getClientIp(req);
+  if (!checkRateLimit(`beehiiv-subscribe:${clientIp}`, 10, 60_000)) {
+    return rateLimitResponse(corsHeaders);
   }
 
   try {

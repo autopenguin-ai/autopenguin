@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { getSupportEmail } from '../_shared/env.ts';
 import { sanitizeUserMessage } from '../_shared/prompt-guard.ts';
+import { checkRateLimit, getClientIp, rateLimitResponse } from '../_shared/rate-limit.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -158,6 +159,12 @@ serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Rate limit: 5 req/min per IP (uses LLM API credits)
+  const clientIp = getClientIp(req);
+  if (!checkRateLimit(`website-chatbot:${clientIp}`, 5, 60_000)) {
+    return rateLimitResponse(corsHeaders);
   }
 
   try {

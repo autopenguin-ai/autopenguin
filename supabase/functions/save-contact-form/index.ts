@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { getEmailFrom, getEmailAddress } from '../_shared/env.ts';
 import { escapeHtml, escapeHtmlWithBreaks } from '../_shared/sanitize.ts';
+import { checkRateLimit, getClientIp, rateLimitResponse } from '../_shared/rate-limit.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -23,6 +24,12 @@ const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Rate limit: 3 req/min per IP
+  const clientIp = getClientIp(req);
+  if (!checkRateLimit(`save-contact-form:${clientIp}`, 3, 60_000)) {
+    return rateLimitResponse(corsHeaders);
   }
 
   try {
