@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { getEmailFrom, getEmailAddress } from '../_shared/env.ts';
+import { escapeHtml, escapeHtmlWithBreaks } from '../_shared/sanitize.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -87,13 +88,13 @@ const handler = async (req: Request): Promise<Response> => {
         subject: `New Contact Form Submission from ${formData.name}`,
         html: `
           <h2>New Contact Request</h2>
-          <p><strong>Name:</strong> ${formData.name}</p>
-          <p><strong>Email:</strong> ${formData.email}</p>
-          <p><strong>Phone:</strong> ${formData.phone || 'N/A'}</p>
-          <p><strong>Company:</strong> ${formData.company || 'N/A'}</p>
-          <p><strong>Position:</strong> ${formData.position || 'N/A'}</p>
-          <p><strong>Preferred Contact:</strong> ${formData.contact_method || 'email'}</p>
-          <p><strong>Message:</strong><br>${formData.message.replace(/\n/g, '<br>')}</p>
+          <p><strong>Name:</strong> ${escapeHtml(formData.name)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(formData.email)}</p>
+          <p><strong>Phone:</strong> ${escapeHtml(formData.phone || 'N/A')}</p>
+          <p><strong>Company:</strong> ${escapeHtml(formData.company || 'N/A')}</p>
+          <p><strong>Position:</strong> ${escapeHtml(formData.position || 'N/A')}</p>
+          <p><strong>Preferred Contact:</strong> ${escapeHtml(formData.contact_method || 'email')}</p>
+          <p><strong>Message:</strong><br>${escapeHtmlWithBreaks(formData.message)}</p>
         `
       });
       console.log("Internal notification sent");
@@ -108,7 +109,7 @@ const handler = async (req: Request): Promise<Response> => {
             <h1 style="color: #2563eb; margin-bottom: 20px;">Thank you for contacting us! 🐧</h1>
             
             <p style="font-size: 16px; line-height: 1.6; color: #374151;">
-              Hi ${formData.name},
+              Hi ${escapeHtml(formData.name)},
             </p>
             
             <p style="font-size: 16px; line-height: 1.6; color: #374151;">
@@ -117,7 +118,7 @@ const handler = async (req: Request): Promise<Response> => {
             
             <div style="background-color: #f9fafb; border-left: 4px solid #2563eb; padding: 15px; margin: 20px 0;">
               <p style="font-size: 14px; line-height: 1.6; color: #374151; margin: 0;">
-                ${formData.message.replace(/\n/g, '<br>')}
+                ${escapeHtmlWithBreaks(formData.message)}
               </p>
             </div>
             

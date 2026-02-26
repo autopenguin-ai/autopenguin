@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { getAppUrl, getEmailFrom } from '../_shared/env.ts';
+import { escapeHtml } from '../_shared/sanitize.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -106,7 +107,7 @@ const handler = async (req: Request): Promise<Response> => {
             <h1 style="color: #2563eb; margin-bottom: 20px;">Welcome to the AutoPenguin Waitlist! 🎉</h1>
             
             <p style="font-size: 16px; line-height: 1.6; color: #374151;">
-              Hi ${data.name},
+              Hi ${escapeHtml(data.name)},
             </p>
             
             <p style="font-size: 16px; line-height: 1.6; color: #374151;">

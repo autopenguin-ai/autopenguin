@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { getEmailFrom, getEmailAddress } from '../_shared/env.ts';
+import { escapeHtml, escapeHtmlWithBreaks } from '../_shared/sanitize.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -149,13 +150,13 @@ const handler = async (req: Request): Promise<Response> => {
           <p><strong>User Status:</strong> ${existingUser ? '✅ Existing User' : '🆕 New User'}</p>
           ${isSalesInquiry ? '<p><strong>⚡ Sales Intent Detected</strong></p>' : ''}
           <hr>
-          <p><strong>Name:</strong> ${data.name}</p>
-          <p><strong>Email:</strong> ${data.email}</p>
-          <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
-          <p><strong>Company:</strong> ${data.company || 'N/A'}</p>
-          <p><strong>Position:</strong> ${data.position || 'N/A'}</p>
-          <p><strong>Preferred Contact:</strong> ${data.contact_method || 'email'}</p>
-          <p><strong>Message:</strong><br>${data.message.replace(/\n/g, '<br>')}</p>
+          <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
+          <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
+          <p><strong>Phone:</strong> ${escapeHtml(data.phone || 'N/A')}</p>
+          <p><strong>Company:</strong> ${escapeHtml(data.company || 'N/A')}</p>
+          <p><strong>Position:</strong> ${escapeHtml(data.position || 'N/A')}</p>
+          <p><strong>Preferred Contact:</strong> ${escapeHtml(data.contact_method || 'email')}</p>
+          <p><strong>Message:</strong><br>${escapeHtmlWithBreaks(data.message)}</p>
         `
       });
       console.log(`Email notification sent to ${recipientEmail}`);

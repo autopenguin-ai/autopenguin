@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 import { getEmailFrom } from '../_shared/env.ts';
+import { escapeHtml, escapeHtmlWithBreaks } from '../_shared/sanitize.ts';
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL") ?? "",
@@ -62,10 +63,10 @@ const handler = async (req: Request): Promise<Response> => {
         to: [supportRequest.user_email],
         subject: "Support Request Received - We're Here to Help!",
         html: `
-          <h1>Thank you for contacting support, ${supportRequest.user_name}!</h1>
+          <h1>Thank you for contacting support, ${escapeHtml(supportRequest.user_name)}!</h1>
           <p>We have received your support request and our team will get back to you as soon as possible.</p>
           <p><strong>Your message:</strong></p>
-          <p>${supportRequest.message}</p>
+          <p>${escapeHtmlWithBreaks(supportRequest.message)}</p>
           <p>Request ID: ${request.id}</p>
           <p>Best regards,<br>The AutoPenguin Team</p>
         `,
