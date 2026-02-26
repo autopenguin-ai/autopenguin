@@ -45,6 +45,7 @@ import Chat from "./pages/Chat";
 import Talent from "./pages/Talent";
 import Bookings from "./pages/Bookings";
 import Finance from "./pages/Finance";
+import OpenSource from "./pages/OpenSource";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +71,7 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/open-source" element={<OpenSource />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/auth/reset" element={<Auth />} />
             <Route path="/waitlist" element={<Navigate to="/auth?mode=signup" replace />} />

@@ -69,11 +69,17 @@ export function PublicHeader() {
             >
               About
             </Link>
-            <Link 
-              to="/contact" 
+            <Link
+              to="/contact"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
               Contact Us
+            </Link>
+            <Link
+              to="/open-source"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Open Source
             </Link>
           </nav>
 
@@ -112,11 +118,17 @@ export function PublicHeader() {
                   >
                     About
                   </Link>
-                  <Link 
-                    to="/contact" 
+                  <Link
+                    to="/contact"
                     className="text-sm font-medium hover:text-primary transition-colors"
                   >
                     Contact Us
+                  </Link>
+                  <Link
+                    to="/open-source"
+                    className="text-sm font-medium hover:text-primary transition-colors"
+                  >
+                    Open Source
                   </Link>
                   <Button onClick={() => navigate("/auth?mode=signup")} className="mt-4">
                     Get Beta Access
