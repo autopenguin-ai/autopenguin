@@ -319,7 +319,10 @@ CREATE OR REPLACE FUNCTION "public"."handle_new_admin_user"() RETURNS "trigger"
     AS $$
 BEGIN
   -- Auto-confirm the super admin email and set as ADMIN
-  IF NEW.email = 'your-admin@example.com' THEN
+  -- Configure via: ALTER SYSTEM SET app.super_admin_email = 'you@example.com';
+  -- Or in Supabase Dashboard: Database Settings → Custom Postgres Config
+  -- If not set, current_setting returns NULL so no one auto-gets SUPER_ADMIN (safe default)
+  IF NEW.email = current_setting('app.super_admin_email', true) THEN
     -- Update the auth.users record to mark email as confirmed
     UPDATE auth.users 
     SET email_confirmed_at = now(), 
@@ -424,7 +427,7 @@ BEGIN
       END IF;
     ELSE
       -- No company exists - create new company (except for super admin)
-      IF NEW.email != 'your-admin@example.com' THEN
+      IF NEW.email != current_setting('app.super_admin_email', true) THEN
         INSERT INTO public.companies (name, display_name, domain)
         VALUES (
           COALESCE(LOWER(company_name_input), LOWER(split_part(user_domain, '.', 1))),
@@ -438,10 +441,10 @@ BEGIN
     END IF;
   END IF;
   
-  -- Handle super admin
-  IF NEW.email = 'your-admin@example.com' THEN
+  -- Handle super admin (configured via app.super_admin_email Postgres setting)
+  IF NEW.email = current_setting('app.super_admin_email', true) THEN
     user_role := 'SUPER_ADMIN'::app_role;
-    existing_company_id := (SELECT id FROM public.companies WHERE name = 'your-company');
+    existing_company_id := (SELECT id FROM public.companies ORDER BY created_at ASC LIMIT 1);
   END IF;
   
   -- Insert profile
