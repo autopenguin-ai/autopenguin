@@ -49,15 +49,15 @@ export default function OpenSource() {
     }
   ];
 
-  const techStack = [
-    { name: "React 18", detail: "TypeScript + Vite" },
-    { name: "Tailwind CSS", detail: "shadcn/ui" },
-    { name: "Supabase", detail: "PostgreSQL + Auth" },
-    { name: "Deno", detail: "Edge Functions" },
-    { name: "Docker", detail: "Self-Hosting" },
-    { name: "Ollama", detail: "Local AI" },
-    { name: "Recharts", detail: "Analytics" },
-    { name: "n8n", detail: "Workflow Automation" }
+  const integrations = [
+    { name: "n8n", detail: "Workflow Automation" },
+    { name: "OpenAI", detail: "GPT Models" },
+    { name: "Anthropic", detail: "Claude Models" },
+    { name: "Google AI", detail: "Gemini Models" },
+    { name: "OpenRouter", detail: "Multi-Provider LLM" },
+    { name: "Ollama", detail: "Local / Offline AI" },
+    { name: "Supabase", detail: "Database & Auth" },
+    { name: "Telegram", detail: "Bot Integration" },
   ];
 
   return (
@@ -232,19 +232,22 @@ export default function OpenSource() {
         </div>
       </section>
 
-      {/* Tech Stack */}
+      {/* Integrations */}
       <section className="py-16 md:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12 space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold">Built With</h2>
+              <h2 className="text-3xl md:text-4xl font-bold">Connects To</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Bring your own tools. AutoPenguin integrates with your existing stack.
+              </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {techStack.map((tech, i) => (
+              {integrations.map((integration, i) => (
                 <Card key={i} className="text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">{tech.name}</CardTitle>
-                    <CardDescription>{tech.detail}</CardDescription>
+                    <CardTitle className="text-lg">{integration.name}</CardTitle>
+                    <CardDescription>{integration.detail}</CardDescription>
                   </CardHeader>
                 </Card>
               ))}
