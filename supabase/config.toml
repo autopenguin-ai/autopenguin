@@ -77,3 +77,27 @@ verify_jwt = false
 
 [functions.stripe-webhook]
 verify_jwt = false
+
+[functions.steve-knowledge]
+verify_jwt = true
+
+[functions.steve-search]
+verify_jwt = true
+
+[functions.steve-learn-outcome]
+verify_jwt = true
+
+[functions.initialize-steve-knowledge]
+verify_jwt = true
+
+[functions.backfill-steve-notification-messages]
+verify_jwt = true
+
+[functions.conversation-summarizer]
+verify_jwt = true
+
+[functions.seed-outcome-embeddings]
+verify_jwt = true
+
+[functions.n8n-template-scraper]
+verify_jwt = true
