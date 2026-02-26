@@ -3,13 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 
 export function PublicHeader() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setTheme } = useTheme();
   const isLanding = location.pathname === "/";
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    setTheme('light');
+  }, [setTheme]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,20 +57,26 @@ export function PublicHeader() {
 
           {/* Centered Navigation - Desktop */}
           <nav className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
-            <Link 
+            <Link
               to="/why-ap"
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               Why AP
             </Link>
-            <Link 
+            <Link
+              to="/open-source"
+              className="text-sm font-medium hover:text-primary transition-colors"
+            >
+              Open Source
+            </Link>
+            <Link
               to="/how-it-works"
               className="text-sm font-medium transition-colors hover:text-primary"
             >
               How It Works
             </Link>
-            <Link 
-              to="/about" 
+            <Link
+              to="/about"
               className="text-sm font-medium hover:text-primary transition-colors"
             >
               About
@@ -74,12 +86,6 @@ export function PublicHeader() {
               className="text-sm font-medium hover:text-primary transition-colors"
             >
               Contact Us
-            </Link>
-            <Link
-              to="/open-source"
-              className="text-sm font-medium hover:text-primary transition-colors"
-            >
-              Open Source
             </Link>
           </nav>
 
@@ -100,20 +106,26 @@ export function PublicHeader() {
               </SheetTrigger>
               <SheetContent side="right">
                 <nav className="flex flex-col gap-4 mt-8">
-                  <Link 
+                  <Link
                     to="/why-ap"
                     className="text-sm font-medium hover:text-primary transition-colors"
                   >
                     Why AP
                   </Link>
-                  <Link 
+                  <Link
+                    to="/open-source"
+                    className="text-sm font-medium hover:text-primary transition-colors"
+                  >
+                    Open Source
+                  </Link>
+                  <Link
                     to="/how-it-works"
                     className="text-sm font-medium hover:text-primary transition-colors"
                   >
                     How It Works
                   </Link>
-                  <Link 
-                    to="/about" 
+                  <Link
+                    to="/about"
                     className="text-sm font-medium hover:text-primary transition-colors"
                   >
                     About
@@ -123,12 +135,6 @@ export function PublicHeader() {
                     className="text-sm font-medium hover:text-primary transition-colors"
                   >
                     Contact Us
-                  </Link>
-                  <Link
-                    to="/open-source"
-                    className="text-sm font-medium hover:text-primary transition-colors"
-                  >
-                    Open Source
                   </Link>
                   <Button onClick={() => navigate("/auth?mode=signup")} className="mt-4">
                     Get Beta Access
