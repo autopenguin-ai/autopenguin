@@ -69,6 +69,7 @@ echo -e "${YELLOW}Generating secure keys...${NC}"
 
 POSTGRES_PASSWORD=$(openssl rand -hex 24)
 JWT_SECRET=$(openssl rand -hex 32)
+DB_ENC_KEY=$(openssl rand -hex 16)
 
 # Generate proper Supabase JWT tokens
 generate_jwt() {
@@ -147,6 +148,7 @@ SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
 POSTGRES_DB=postgres
 POSTGRES_PORT=5432
 SUPABASE_PUBLIC_URL=http://localhost:8000
+DB_ENC_KEY=${DB_ENC_KEY}
 
 # Frontend
 VITE_SUPABASE_URL=http://localhost:8000
