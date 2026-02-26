@@ -1,0 +1,79 @@
+project_id = ""
+
+[functions.steve-chat]
+verify_jwt = true
+
+[functions.manage-llm]
+verify_jwt = true
+
+[functions.manage-integration]
+verify_jwt = true
+
+[functions.manage-invitations]
+verify_jwt = true
+
+[functions.manage-telegram]
+verify_jwt = true
+
+[functions.delete-user-account]
+verify_jwt = true
+
+[functions.extract-learnings]
+verify_jwt = true
+
+[functions.send-review-notification]
+verify_jwt = true
+
+[functions.send-support-request]
+verify_jwt = true
+
+[functions.stripe-checkout]
+verify_jwt = true
+
+[functions.stripe-portal]
+verify_jwt = true
+
+[functions.import-contacts]
+verify_jwt = true
+
+[functions.import-properties]
+verify_jwt = true
+
+[functions.n8n-api-service]
+verify_jwt = true
+
+[functions.send-auth-email]
+verify_jwt = false
+
+[functions.website-chatbot]
+verify_jwt = false
+
+[functions.submit-waitlist]
+verify_jwt = false
+
+[functions.submit-contact-chatbot]
+verify_jwt = false
+
+[functions.beehiiv-subscribe]
+verify_jwt = false
+
+[functions.send-automation-request]
+verify_jwt = false
+
+[functions.send-bug-report]
+verify_jwt = false
+
+[functions.save-contact-form]
+verify_jwt = false
+
+[functions.n8n-webchat-webhook]
+verify_jwt = false
+
+[functions.n8n-task-webhook]
+verify_jwt = false
+
+[functions.telegram-webhook]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false

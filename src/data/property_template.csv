@@ -1,0 +1,3 @@
+Title,Property Code,Address,Price,Property Type,Status,Bedrooms,Bathrooms,Square Feet,District,Description,Photos,Facilities,Features,Is Featured,Owner
+Luxury Apartment,LUX001,123 Central Park West,5000000,APARTMENT,AVAILABLE,3,2,2000,Central Park,Beautiful luxury apartment with city views,"[""https://example.com/photo1.jpg"", ""https://example.com/photo2.jpg""]","{""gym"": true, ""pool"": true}","{""balcony"": true, ""parking"": 2}",true,user@example.com
+Modern Condo,MOD002,456 Ocean Drive,3500000,CONDO,SOLD,2,2,1500,Beachfront,Modern condo with ocean views,"[""https://example.com/photo3.jpg""]","{""concierge"": true}","{""ocean_view"": true}",false,user@example.com

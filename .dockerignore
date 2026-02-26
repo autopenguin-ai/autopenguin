@@ -1,0 +1,10 @@
+node_modules
+.git
+docker/volumes
+docker/.env
+dist
+dev-dist
+.claude
+docs
+supabase/.temp
+*.md
