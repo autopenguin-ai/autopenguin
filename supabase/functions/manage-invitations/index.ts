@@ -8,13 +8,15 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-function generateInvitationCode(): string {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+function generateInvitationCode(length: number = 8): string {
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  const maxValid = Math.floor(256 / chars.length) * chars.length;
   let code = "";
-  const randomBytes = new Uint8Array(8);
-  crypto.getRandomValues(randomBytes);
-  for (let i = 0; i < 8; i++) {
-    code += chars[randomBytes[i] % chars.length];
+  while (code.length < length) {
+    const randomBytes = crypto.getRandomValues(new Uint8Array(1));
+    if (randomBytes[0] < maxValid) {
+      code += chars[randomBytes[0] % chars.length];
+    }
   }
   return code;
 }
