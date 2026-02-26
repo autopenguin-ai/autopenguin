@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 import { getEmailFrom, getAppUrl } from '../_shared/env.ts';
+import { escapeHtml } from '../_shared/sanitize.ts';
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL") ?? "",
@@ -37,15 +38,15 @@ const renderAutomationRequestEmail = (
     subject: isEnglish 
       ? 'Your Automation Request Has Been Received' 
       : '您的自動化請求已收到',
-    greeting: isEnglish 
-      ? `Dear ${name},` 
-      : `親愛的 ${name}，`,
+    greeting: isEnglish
+      ? `Dear ${escapeHtml(name)},`
+      : `親愛的 ${escapeHtml(name)}，`,
     thankYou: isEnglish
       ? 'Thank you for your automation request!'
       : '感謝您提交自動化請求！',
     received: isEnglish
-      ? `We have received your request for: <strong>${automationType}</strong>`
-      : `我們已收到您的請求：<strong>${automationType}</strong>`,
+      ? `We have received your request for: <strong>${escapeHtml(automationType)}</strong>`
+      : `我們已收到您的請求：<strong>${escapeHtml(automationType)}</strong>`,
     timeline: isEnglish
       ? 'We have got your request and will start the process within <strong>24 hours</strong>. You\'ll get your first draft within <strong>48 hours</strong>.'
       : '我們已收到您的請求，將在 <strong>24 小時內</strong>開始處理。您將在 <strong>48 小時內</strong>收到初稿。',
@@ -181,8 +182,16 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
-    const { 
+    const {
       user_email, 
       name, 
       automationType, 

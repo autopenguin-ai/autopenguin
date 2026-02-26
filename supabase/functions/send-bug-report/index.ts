@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 import { getEmailFrom } from '../_shared/env.ts';
+import { escapeHtml } from '../_shared/sanitize.ts';
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL") ?? "",
@@ -31,6 +32,14 @@ const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   try {
@@ -69,7 +78,7 @@ const handler = async (req: Request): Promise<Response> => {
         subject: "Bug Report Received - We're On It!",
         html: `
           <h1>Thank you for your bug report!</h1>
-          <p>We have received your report about: <strong>${bugReport.title}</strong></p>
+          <p>We have received your report about: <strong>${escapeHtml(bugReport.title)}</strong></p>
           <p>Thank you, we got the report and we'll fix the bug ASAP.</p>
           <p>Report ID: ${report.id}</p>
           <p>Best regards,<br>The AutoPenguin Team</p>

@@ -58,10 +58,10 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.send-automation-request]
-verify_jwt = false
+verify_jwt = true
 
 [functions.send-bug-report]
-verify_jwt = false
+verify_jwt = true
 
 [functions.save-contact-form]
 verify_jwt = false
