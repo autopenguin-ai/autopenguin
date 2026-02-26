@@ -1,4 +1,4 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
 import Stripe from 'https://esm.sh/stripe@15.4.0?target=deno';
 import { Resend } from 'https://esm.sh/resend@4.0.0';
 import { getAppUrl, getEmailFrom, getEmailAddress } from '../_shared/env.ts';
