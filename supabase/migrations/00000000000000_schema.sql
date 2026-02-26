@@ -1212,6 +1212,24 @@ CREATE TABLE IF NOT EXISTS "public"."invoices" (
 ALTER TABLE "public"."invoices" OWNER TO "postgres";
 
 
+CREATE TABLE IF NOT EXISTS "public"."leads" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "client_id" "uuid",
+    "source" "text" DEFAULT 'manual'::"text",
+    "stage" "text" DEFAULT 'NEW'::"text" NOT NULL,
+    "priority" "text" DEFAULT 'MEDIUM'::"text",
+    "company_id" "uuid" NOT NULL,
+    "owner_id" "uuid",
+    "notes" "text",
+    "created_by_automation" boolean DEFAULT false,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE "public"."leads" OWNER TO "postgres";
+
+
 CREATE TABLE IF NOT EXISTS "public"."llm_connections" (
     "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "company_id" "uuid" NOT NULL,
@@ -1896,6 +1914,11 @@ ALTER TABLE ONLY "public"."conversations"
 
 ALTER TABLE ONLY "public"."deals"
     ADD CONSTRAINT "deals_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."leads"
+    ADD CONSTRAINT "leads_pkey" PRIMARY KEY ("id");
 
 
 
@@ -2629,6 +2652,21 @@ ALTER TABLE ONLY "public"."deals"
 
 
 
+ALTER TABLE ONLY "public"."leads"
+    ADD CONSTRAINT "leads_client_id_fkey" FOREIGN KEY ("client_id") REFERENCES "public"."clients"("id") ON DELETE SET NULL;
+
+
+
+ALTER TABLE ONLY "public"."leads"
+    ADD CONSTRAINT "leads_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id");
+
+
+
+ALTER TABLE ONLY "public"."leads"
+    ADD CONSTRAINT "leads_owner_id_fkey" FOREIGN KEY ("owner_id") REFERENCES "auth"."users"("id");
+
+
+
 ALTER TABLE ONLY "public"."deletion_requests"
     ADD CONSTRAINT "deletion_requests_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE CASCADE;
 
@@ -3316,6 +3354,25 @@ CREATE POLICY "deals_select" ON "public"."deals" FOR SELECT USING ((("company_id
 
 
 CREATE POLICY "deals_update" ON "public"."deals" FOR UPDATE USING ((("company_id" = "public"."get_user_company_id"()) AND ("public"."has_role"('ADMIN'::"public"."app_role") OR "public"."user_owns_or_assigned"("owner_id", "assignee_ids"))));
+
+
+
+ALTER TABLE "public"."leads" ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY "leads_select" ON "public"."leads" FOR SELECT USING (("public"."is_super_admin"() OR ("company_id" = "public"."get_user_company_id"())));
+
+
+
+CREATE POLICY "leads_insert" ON "public"."leads" FOR INSERT WITH CHECK (("public"."is_super_admin"() OR ("company_id" = "public"."get_user_company_id"())));
+
+
+
+CREATE POLICY "leads_update" ON "public"."leads" FOR UPDATE USING (("public"."is_super_admin"() OR (("company_id" = "public"."get_user_company_id"()) AND ("public"."has_role"('ADMIN'::"public"."app_role") OR ("owner_id" = "auth"."uid"())))));
+
+
+
+CREATE POLICY "leads_delete" ON "public"."leads" FOR DELETE USING (("public"."is_super_admin"() OR (("company_id" = "public"."get_user_company_id"()) AND "public"."has_role"('ADMIN'::"public"."app_role"))));
 
 
 
@@ -5038,6 +5095,12 @@ GRANT ALL ON TABLE "public"."conversations" TO "service_role";
 GRANT ALL ON TABLE "public"."deals" TO "anon";
 GRANT ALL ON TABLE "public"."deals" TO "authenticated";
 GRANT ALL ON TABLE "public"."deals" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."leads" TO "anon";
+GRANT ALL ON TABLE "public"."leads" TO "authenticated";
+GRANT ALL ON TABLE "public"."leads" TO "service_role";
 
 
 
