@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 import { getAppUrl } from '../_shared/env.ts';
+import { detectInjectionPatterns, stripInvisibleChars } from '../_shared/prompt-guard.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -217,7 +218,17 @@ RULES:
     return;
   }
 
-  console.log(`LLM produced ${entries.length} knowledge entries`);
+  // 4b. Filter out entries with injection patterns
+  const safeEntries = entries.filter((entry: any) => {
+    const content = stripInvisibleChars(entry.content || entry.summary || '');
+    if (detectInjectionPatterns(content)) {
+      console.warn('Rejected learning entry with injection pattern:', content.substring(0, 100));
+      return false;
+    }
+    return true;
+  });
+
+  console.log(`LLM produced ${entries.length} knowledge entries, ${safeEntries.length} passed injection filter`);
 
   // 5. Check memory cap
   const { count: existingCount } = await supabase
@@ -228,7 +239,7 @@ RULES:
   let availableSlots = MEMORY_CAP - (existingCount || 0);
 
   // 6. For each entry: dedup, embed, insert
-  for (const entry of entries) {
+  for (const entry of safeEntries) {
     const embedding = await generateEmbedding(`${entry.title}\n${entry.content}`);
     if (!embedding) {
       console.error('Failed to generate embedding for:', entry.title);
